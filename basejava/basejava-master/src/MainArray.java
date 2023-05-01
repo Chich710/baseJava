@@ -11,18 +11,27 @@ public class MainArray {
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        Resume r;
+        Resume resume;
+        Resume newResume;
         while (true) {
-            System.out.print("Введите одну из команд - (list | size | save uuid | delete uuid | get uuid | clear | exit): ");
+            System.out.print("Введите одну из команд - (list | size | save uuid | update uuid | delete uuid | get uuid | clear | exit): ");
             String[] params = reader.readLine().trim().toLowerCase().split(" ");
-            if (params.length < 1 || params.length > 2) {
+            if (params.length < 1 || params.length > 3) {
                 System.out.println("Неверная команда.");
                 continue;
             }
+
             String uuid = null;
             if (params.length == 2) {
                 uuid = params[1].intern();
             }
+
+            String newUuid = null;
+            if (params.length == 3) {
+                uuid = params[1].intern();
+                newUuid = params[2].intern();
+            }
+
             switch (params[0]) {
                 case "list":
                     printAll();
@@ -31,9 +40,9 @@ public class MainArray {
                     System.out.println(ARRAY_STORAGE.size());
                     break;
                 case "save":
-                    r = new Resume();
-                    r.uuid = uuid;
-                    ARRAY_STORAGE.save(r);
+                    resume = new Resume();
+                    resume.uuid = uuid;
+                    ARRAY_STORAGE.save(resume);
                     printAll();
                     break;
                 case "delete":
@@ -47,6 +56,14 @@ public class MainArray {
                     ARRAY_STORAGE.clear();
                     printAll();
                     break;
+                case "update":
+                    resume = new Resume();
+                    newResume = new Resume();
+                    resume.uuid = uuid;
+                    newResume.uuid = newUuid;
+                    ARRAY_STORAGE.update(resume, newResume);
+                    printAll();
+                    break;
                 case "exit":
                     return;
                 default:
@@ -56,14 +73,15 @@ public class MainArray {
         }
     }
 
+
     static void printAll() {
         Resume[] all = ARRAY_STORAGE.getAll();
         System.out.println("----------------------------");
         if (all.length == 0) {
             System.out.println("Empty");
         } else {
-            for (Resume r : all) {
-                System.out.println(r);
+            for (Resume resume : all) {
+                System.out.println(resume);
             }
         }
         System.out.println("----------------------------");

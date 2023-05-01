@@ -29,6 +29,18 @@ public class ArrayStorage {
         } else System.out.println("Array memory is full");
     }
 
+    protected void update(Resume oldUuid, Resume newUuid) {
+        boolean uuidNotFound = true;
+        for (int i = 0; i < size; i++) {
+            if (oldUuid.uuid.equals(storage[i].uuid)) {
+                storage[i] = newUuid;
+                uuidNotFound = false;
+            }
+        }
+        if (uuidNotFound) {
+            System.out.println("Uuid not found");
+        }
+    }
 
     protected Resume get(String uuid) {
         for (int i = 0; i < size; i++) {
